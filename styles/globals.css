@@ -1,0 +1,81 @@
+/**
+ * @fileoverview Legacy styles file updated for pixel-perfect replication of the provided image
+ * @author Cursor AI
+ * @created 2024-12-19
+ * @lastModified 2024-12-19
+ * 
+ * This file maintains compatibility with any legacy CSS while implementing
+ * the new color scheme for precise visual replication.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  :root {
+    /* Pixel-perfect color scheme - matches app/globals.css */
+    --background: 237 22% 13%; /* #1A1B26 */
+    --foreground: 0 0% 100%; /* #FFFFFF */
+    --card: 237 17% 21%; /* #2D2E3B */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
+    --popover: 237 22% 13%; /* #1A1B26 */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: 249 100% 69%; /* #7B61FF */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --secondary: 237 17% 21%; /* #2D2E3B */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+    --muted: 237 17% 21%; /* #2D2E3B */
+    --muted-foreground: 0 0% 88%; /* #E0E0E0 */
+    --accent: 237 15% 26%; /* #363749 */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
+    --destructive: 0 84% 60%; /* Red */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+    --border: 0 0% 88%; /* #E0E0E0 */
+    --input: 0 0% 100%; /* #FFFFFF */
+    --ring: 0 0% 88%; /* #E0E0E0 */
+    
+    --radius: 0.75rem;
+  }
+  
+  /* Dark mode override (redundant but kept for compatibility) */
+  .dark {
+    --background: 237 22% 13%; /* #1A1B26 */
+    --foreground: 0 0% 100%; /* #FFFFFF */
+    --card: 237 17% 21%; /* #2D2E3B */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
+    --popover: 237 22% 13%; /* #1A1B26 */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: 249 100% 69%; /* #7B61FF */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --secondary: 237 17% 21%; /* #2D2E3B */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+    --muted: 237 17% 21%; /* #2D2E3B */
+    --muted-foreground: 0 0% 88%; /* #E0E0E0 */
+    --accent: 237 15% 26%; /* #363749 */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
+    --destructive: 0 84% 60%; /* Red */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+    --border: 0 0% 88%; /* #E0E0E0 */
+    --input: 0 0% 100%; /* #FFFFFF */
+    --ring: 0 0% 88%; /* #E0E0E0 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

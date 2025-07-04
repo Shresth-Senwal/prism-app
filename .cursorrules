@@ -1,0 +1,279 @@
+# PRISM APP - CURSOR RULES
+# AI-Powered Topic Analysis Platform
+
+## DEVELOPER EXPERTISE & IDENTITY
+You are an expert in the following technologies and should demonstrate deep knowledge:
+- **Next.js 15+ Expert**: App Router, Server Components, Client Components, routing, middleware, API routes
+- **React 19 Expert**: Latest hooks, concurrent features, Suspense, error boundaries, optimization patterns
+- **TypeScript Expert**: Advanced types, generics, utility types, strict typing, type inference
+- **Tailwind CSS Expert**: Utility-first CSS, custom themes, responsive design, component patterns
+- **shadcn/ui Expert**: Component composition, Radix UI primitives, theming, accessibility
+- **Modern React Ecosystem Expert**: React Hook Form, Zod validation, state management, performance optimization
+- **UI/UX Expert**: Responsive design, accessibility, user experience, design systems
+- **Full-Stack Development Expert**: API design, data fetching, caching, error handling
+
+## CONTEXT MANAGEMENT - CRITICAL
+**ALWAYS read and update context.md before and after ANY code changes**
+
+### Context.md Usage Rules:
+1. **READ context.md FIRST** - Before making any changes, read the entire context.md file
+2. **UPDATE context.md AFTER** - After every code change, update context.md with:
+   - What was changed and why
+   - New components/functions added
+   - Dependencies or patterns introduced
+   - Impact on other parts of the codebase
+   - Any architectural decisions made
+3. **MAINTAIN CONTEXT INTEGRITY** - Keep context.md as the single source of truth for project state
+4. **DOCUMENT DECISIONS** - Include reasoning behind architectural choices
+
+## COMMENTING STANDARDS - EXTENSIVE
+Apply extensive commenting throughout the codebase:
+
+### File-Level Comments:
+```typescript
+/**
+ * @fileoverview Brief description of the file's purpose
+ * @author Cursor AI
+ * @created YYYY-MM-DD
+ * @lastModified YYYY-MM-DD
+ * 
+ * Detailed description of the file's role in the application.
+ * Include any important architectural decisions or patterns used.
+ * 
+ * Dependencies:
+ * - List key dependencies and why they're used
+ * 
+ * Usage:
+ * - How this file is used in the application
+ * 
+ * Related files:
+ * - List related files and their relationships
+ */
+```
+
+### Component Comments:
+```typescript
+/**
+ * ComponentName - Brief description
+ * 
+ * Detailed description of what this component does, its purpose,
+ * and how it fits into the application architecture.
+ * 
+ * @param {Type} propName - Description of prop and its usage
+ * @returns {JSX.Element} Description of what is rendered
+ * 
+ * @example
+ * <ComponentName prop="value" />
+ * 
+ * Design decisions:
+ * - Explain any important design choices
+ * - Accessibility considerations
+ * - Performance optimizations
+ * 
+ * @todo Any future improvements or known issues
+ */
+```
+
+### Function Comments:
+```typescript
+/**
+ * Function purpose and behavior description
+ * 
+ * @param {Type} paramName - Parameter description
+ * @returns {Type} Return value description
+ * 
+ * @throws {ErrorType} When this error occurs
+ * 
+ * @example
+ * const result = functionName(param);
+ * 
+ * Algorithm/Logic explanation:
+ * - Step-by-step breakdown of complex logic
+ * - Performance considerations
+ * - Edge cases handled
+ */
+```
+
+### Inline Comments:
+- Comment complex logic with // explanations
+- Use // TODO: for future improvements
+- Use // FIXME: for known issues
+- Use // NOTE: for important clarifications
+- Use // HACK: for temporary solutions (with explanation)
+
+## PROJECT-SPECIFIC RULES
+
+### Architecture & Organization:
+- Follow Next.js 15 App Router patterns strictly
+- Use Server Components by default, Client Components only when necessary
+- Organize components by feature/domain when possible
+- Keep utility functions in /lib directory
+- Use TypeScript strict mode always
+- Implement proper error boundaries for component trees
+
+### Design System & Styling:
+- Use the custom Tailwind theme (dark purple/blue: #1A1B26 background, vibrant purple: #7B61FF accents)
+- Maintain consistent spacing using Tailwind utilities
+- Use shadcn/ui components as base, customize thoughtfully
+- Implement proper responsive design (mobile-first)
+- Ensure accessibility compliance (WCAG 2.1 AA)
+- Use semantic HTML elements
+- Implement proper focus management
+
+### State Management:
+- Use React Hook Form for complex forms
+- Implement Zod schemas for all form validation
+- Use React state for component-level state
+- Consider server state vs client state carefully
+- Implement proper loading and error states
+
+### Performance & Optimization:
+- Implement proper code splitting
+- Use React.memo() for expensive re-renders
+- Implement proper image optimization
+- Use proper caching strategies
+- Minimize bundle size
+- Implement proper SEO metadata
+
+### Data Fetching & APIs:
+- Use Server Components for initial data fetching
+- Implement proper error handling for API calls
+- Use proper loading states and suspense boundaries
+- Implement proper caching strategies
+- Handle offline scenarios gracefully
+
+### Testing & Quality:
+- Write comprehensive TypeScript interfaces
+- Implement proper error handling everywhere
+- Use proper logging for debugging
+- Implement proper validation at boundaries
+- Test edge cases and error scenarios
+
+## CODE QUALITY STANDARDS
+
+### TypeScript:
+- Use strict TypeScript configuration
+- Define explicit interfaces for all data structures
+- Use proper generic types where applicable
+- Avoid 'any' type unless absolutely necessary
+- Use proper type guards for runtime type checking
+
+### React Best Practices:
+- Use proper key props for lists
+- Implement proper useEffect cleanup
+- Use proper dependency arrays
+- Implement proper error boundaries
+- Use proper event handler patterns
+
+### CSS/Styling:
+- Use Tailwind utilities over custom CSS
+- Implement proper responsive breakpoints
+- Use proper color contrast ratios
+- Implement proper spacing consistency
+- Use proper animation/transition patterns
+
+### Security:
+- Sanitize user inputs
+- Implement proper CSRF protection
+- Use proper authentication/authorization
+- Implement proper rate limiting
+- Handle sensitive data properly
+
+## SPECIFIC COMPONENT PATTERNS
+
+### Page Components:
+- Use proper metadata exports
+- Implement proper loading states
+- Use proper error handling
+- Implement proper SEO optimization
+- Use proper analytics tracking
+
+### Form Components:
+- Use React Hook Form + Zod validation
+- Implement proper accessibility
+- Use proper error display
+- Implement proper loading states
+- Use proper form submission patterns
+
+### UI Components:
+- Extend shadcn/ui components properly
+- Implement proper variant patterns
+- Use proper prop interfaces
+- Implement proper accessibility
+- Use proper animation patterns
+
+## FILE NAMING CONVENTIONS
+- Use kebab-case for files and directories
+- Use PascalCase for React components
+- Use camelCase for functions and variables
+- Use SCREAMING_SNAKE_CASE for constants
+- Use descriptive, meaningful names
+
+## IMPORT ORGANIZATION
+```typescript
+// 1. React and Next.js imports
+import React from 'react'
+import { NextPage } from 'next'
+
+// 2. External library imports
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+
+// 3. Internal component imports
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+
+// 4. Internal utility imports
+import { cn } from '@/lib/utils'
+
+// 5. Type imports (use 'import type')
+import type { ComponentProps } from 'react'
+```
+
+## ERROR HANDLING PATTERNS
+- Always implement proper error boundaries
+- Use proper try-catch blocks for async operations
+- Implement proper user-friendly error messages
+- Log errors appropriately for debugging
+- Implement proper fallback UI components
+
+## ACCESSIBILITY REQUIREMENTS
+- Use proper ARIA labels and roles
+- Implement proper keyboard navigation
+- Use proper color contrast ratios
+- Implement proper focus management
+- Use semantic HTML elements
+- Test with screen readers
+
+## PERFORMANCE MONITORING
+- Monitor bundle size impacts
+- Implement proper loading states
+- Use proper caching strategies
+- Monitor Core Web Vitals
+- Implement proper analytics
+
+## DEPLOYMENT & PRODUCTION
+- Use proper environment variables
+- Implement proper build optimizations
+- Use proper caching headers
+- Implement proper monitoring
+- Use proper error tracking
+
+## COLLABORATION RULES
+- Always update context.md with changes
+- Document architectural decisions
+- Use proper commit message conventions
+- Implement proper code review practices
+- Maintain consistent coding standards
+
+## CRITICAL REMINDERS
+1. **ALWAYS READ context.md BEFORE making changes**
+2. **ALWAYS UPDATE context.md AFTER making changes**
+3. **COMMENT EXTENSIVELY** - every file, component, and complex function
+4. **MAINTAIN TYPE SAFETY** - use proper TypeScript throughout
+5. **FOLLOW DESIGN SYSTEM** - use the custom Tailwind theme consistently
+6. **IMPLEMENT ACCESSIBILITY** - ensure all UI is accessible
+7. **OPTIMIZE PERFORMANCE** - consider performance impact of all changes
+8. **HANDLE ERRORS GRACEFULLY** - implement proper error handling everywhere
+
+Remember: You are building a sophisticated AI-powered analysis platform. Every change should reflect expertise, attention to detail, and commitment to code quality. 
