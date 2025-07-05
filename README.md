@@ -1,6 +1,6 @@
 # Prism - AI-Powered Topic Analysis Platform
 
-![Prism Homepage](https://raw.githubusercontent.com/user-attachments/assets/19b51887-b363-494b-9494-f25b2909f298)
+[![Prism Homepage](https://raw.githubusercontent.com/user-attachments/assets/19b51887-b363-494b-9494-f25b2909f298)](https://prism-app-nine.vercel.app/)
 
 Prism is a sophisticated, AI-powered topic analysis platform designed to provide comprehensive, multi-perspective analysis of any given topic. It aggregates and analyzes content from across the digital world, presenting users with detailed insights, diverse viewpoints, and emerging trends in a stunning, modern interface.
 
