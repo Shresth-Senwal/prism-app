@@ -1,8 +1,20 @@
+#### [2025-07-25] .gitignore Updated for Env Files
+
+- Updated `.gitignore` to ignore all `.env` files, including `.env`, `.env.*`, `.env.local`, and `.env*.local`.
+- Reason: Prevent accidental commit of sensitive environment variables and secrets.
+- Impact: All environment variable files are now excluded from version control, improving security and compliance.
 # PRISM APP - PROJECT CONTEXT
-*Last Updated: 2024-12-19*
+*Last Updated: 2025-07-25*
+#### [2025-07-25] Legacy Mobile Menu Fully Removed & Header Cleanup
+
+- All code related to the legacy sliding mobile menu has been fully removed from the codebase, including from `components/navigation/responsive-header.tsx`.
+- The `responsive-header.tsx` file now only contains desktop navigation and brand/logo logic. All mobile menu logic, animation variants, and exports for mobile navigation have been deleted.
+- The file was cleaned up to resolve all build errors caused by partial removals and duplicate/stray code. The interface definition was fixed, and only the valid exported `ResponsiveHeader` function and `DesktopNavItem` remain.
+- **Architectural Decision**: Only the new dropdown mobile menu in `components/header.tsx` is used for mobile navigation. The legacy responsive header is now desktop-only and will not conflict with the new implementation.
+- **Impact**: No legacy mobile menu code remains. The codebase is now consistent with the new navigation architecture, and all build errors are resolved.
 
 ## PROJECT OVERVIEW
-**Prism** is an AI-powered topic analysis platform that provides comprehensive, multi-perspective analysis of any topic by aggregating and analyzing content from across the digital world. The application allows users to search for topics and receive detailed analyses showing different viewpoints, trends, and insights.
+**Prism** is an AI-powered topic analysis platform that provides comprehensive, multi-perspective analysis of any topic by aggregating and analyzing content from across the digital world. The application allows users to search for topics and receive detailed analyses showing different viewpoints, trends, and insights from multiple sources including social media (X/Twitter), Reddit discussions, news articles, and web content.
 
 ## CURRENT ARCHITECTURE
 
@@ -14,6 +26,24 @@
 - **Components**: shadcn/ui built on Radix UI
 - **Package Manager**: pnpm
 - **Icons**: Lucide React
+
+### Data Sources & APIs
+**Reddit API**: Community discussions and forum posts (OAuth2 server-side integration; now used in /api/analyze for all Reddit data fetching)
+- **Web Search**: General web content (placeholder for future implementation)
+- **Gemini Flash 2.0**: AI analysis and synthesis engine
+
+#### [2025-07-24] Reddit API OAuth2 UPGRADE
+
+- The /api/analyze API route now uses authenticated Reddit API requests via OAuth2 (see `lib/reddit-auth.ts`).
+- Reason: Reddit's public API returned 403 errors for server-side requests; OAuth2 is required for reliable, production-grade Reddit data access.
+- Impact: Reddit data is now always available for analysis, and sources are returned to the UI. This enables the "Sources" section in the analysis output to work as intended.
+- Architectural Decision: All Reddit data fetching is now server-side and authenticated. This improves reliability, avoids rate limits, and ensures compliance with Reddit's API terms. If Reddit integration needs to be disabled, stub out the fetchRedditPosts helper in the API route.
+
+#### [2025-07-24] X (Twitter) API REMOVED
+- The X (Twitter) API v2 integration has been fully removed from the codebase, including all fetch logic, normalization, and API route usage.
+- Reason: User requested complete removal due to rate limits, maintenance overhead, and to simplify the analysis pipeline.
+- Impact: The /api/analyze endpoint now only aggregates Reddit and web results (plus Gemini analysis). All X API credentials and documentation are now obsolete.
+- Architectural Decision: This change reduces external API dependencies and improves reliability. If X integration is needed in the future, it should be re-implemented as a separate, optional module with robust error handling and rate limit awareness.
 
 ### Design System
 - **Primary Background**: Very dark desaturated purple/blue (#1A1B26)
@@ -91,6 +121,27 @@ components/
 
 4. **Theming**
    - Custom color palette
+   - Dark mode optimized design
+   - Consistent spacing and typography
+
+5. **Multi-Source Data Analysis API** *(UPDATED - 2025-07-24)*
+   - Reddit API integration for community discussions (OAuth2 server-side)
+   - Gemini Flash 2.0 for AI-powered analysis and synthesis
+   - Normalized data format across all sources
+   - Graceful error handling and fallback mechanisms
+   - [2025-07-24] X (Twitter) API v2 integration and NewsAPI have been fully removed
+
+### API Endpoints
+- `POST /api/analyze` - Multi-source topic analysis
+  - Fetches data from Reddit and web sources
+  - Uses Gemini Flash 2.0 for synthesis
+  - Returns structured analysis with perspectives and insights
+
+### Environment Variables Required
+- `GEMINI_API_KEY` - Google Gemini Flash 2.0 API key
+- `SEARCH_API_KEY` - Web search API key (optional)
+ - `REDDIT_CLIENT_ID` - Reddit API client ID (for OAuth2)
+ - `REDDIT_CLIENT_SECRET` - Reddit API client secret (for OAuth2)
    - Dark mode support
    - CSS custom properties
 
@@ -465,3 +516,98 @@ The analysis page (`app/analysis/page.tsx`) has been completely overhauled to pr
 - **Hover Effects**: Smooth, subtle hover transitions.
 
 **Next Update Required**: After any code modifications, architectural changes, or new feature implementations.
+
+### Reddit OAuth2 Integration (2025-07-24)
+- Implemented `lib/reddit-auth.ts` for server-side OAuth2 authentication and API requests to Reddit.
+- Uses client credentials grant for app-level access (no user context).
+- All Reddit API calls should use `getRedditAccessToken()` and `fetchRedditData()` from this utility.
+- Credentials are stored in `.env.local` and never hardcoded.
+- Architectural decision: This approach is more robust, secure, and future-proof than public JSON endpoints, and allows for higher rate limits and more advanced Reddit API features.
+
+### TabsBar Component Integration (2025-01-27)
+- **Created**: New custom `components/ui/tabs-bar.tsx` component to replace `components/content/dynamic-tabs.tsx`.
+- **Motivation**: User reported visual bugs with tab underline and active state styling. Required a complete visual overhaul to match provided screenshot with mobile-first, accessible design.
+- **Key Features**:
+  - Mobile-first responsive design with horizontal scrolling
+  - Smooth animated underline using framer-motion that follows the active tab
+  - Touch-friendly interactions (44px minimum height)
+  - Full keyboard navigation (arrow keys, tab, enter/space)
+  - Semantic ARIA attributes and roles for accessibility
+  - Badge support with dynamic counts
+  - Icon and text scaling for mobile breakpoints
+  - No hardcoded content - fully prop-driven with strict TypeScript types
+
+- **Integration**: Updated `app/analysis/page.tsx` to use the new TabsBar component:
+  - Added `convertToTabItems()` helper function to transform `DynamicTabConfig` to `TabItem` format
+  - Replaced `DynamicTabs` component with `TabsBar` and separate content rendering
+  - Added memoized tab items calculation for performance
+  - Maintained all existing functionality while improving visual design
+
+- **Impact**: Resolves all tab styling issues, provides pixel-perfect design matching the screenshot, and ensures full mobile and accessibility compliance. The component is reusable across the application with consistent behavior.
+
+### Mobile Navigation Fix (2025-01-27)
+- **Issue**: The header component had no mobile navigation menu - only desktop navigation was implemented, making the app unusable on mobile devices.
+- **Solution**: Complete rebuild of `components/header.tsx` with mobile-first responsive design:
+  - **Desktop**: Logo on left, navigation links on right with smooth animated underlines using framer-motion
+  - **Mobile**: Logo on left, hamburger menu button on right with slide-out navigation panel
+  - **Animations**: Smooth slide-in/out transitions, icon rotation, staggered menu item animations
+  - **Accessibility**: Full keyboard navigation, ARIA labels, focus management, escape key support
+  - **UX Enhancements**: Auto-close on navigation, body scroll lock during menu open, backdrop blur overlay
+
+- **Technical Implementation**:
+  - Uses `useIsMobile()` hook for responsive behavior detection
+  - Integrates with `defaultNavigationConfig` from ui-config.ts for consistency
+  - Implements proper TypeScript null checking for optional NavigationItem properties
+  - Mobile menu panel slides in from right with backdrop overlay
+  - Active page indicators for both desktop (underline) and mobile (dot indicator)
+  - Touch-friendly mobile interactions with proper spacing and sizing
+
+- **Impact**: Mobile navigation now works perfectly across all screen sizes, providing a native mobile app experience with smooth animations and full accessibility compliance.
+
+### Mobile Navigation Rebuild (2025-01-27)
+- **Issue**: User reported the mobile navigation was "completely broken" with React component errors related to undefined exports.
+- **Root Cause**: The previous implementation had complex framer-motion animations and navigation config dependencies that were causing import/export issues.
+- **Solution**: Complete ground-up rebuild of the mobile navigation system:
+  - **Removed**: All complex framer-motion animations and dependencies on navigation config
+  - **Rebuilt**: Simple, clean mobile navigation with basic CSS transitions
+  - **Fixed**: Removed unused `DynamicSearch` import from analysis page that was causing React errors
+  - **Simplified**: Direct implementation of navigation items without external config dependencies
+  
+- **New Implementation Features**:
+  - Clean hamburger menu toggle (Menu/X icons)
+  - Right-side slide-out mobile panel (w-80, max-w-[80vw])
+  - Backdrop overlay with click-to-close functionality
+  - Body scroll lock when menu is open
+  - Auto-close on route navigation
+  - Active page highlighting with primary color
+  - Touch-friendly 44px+ tap targets
+  - Proper z-index layering (header: z-50, panel: z-50, backdrop: z-40)
+
+- **Impact**: Mobile navigation now works reliably without any React errors. The implementation is simpler, more maintainable, and provides excellent user experience on mobile devices.
+
+### Mobile Dropdown Navigation (2025-01-27)
+- **User Feedback**: The previous sliding panel implementation was "horrible" and not user-friendly.
+- **User Request**: Wanted a "nice mobile friendly dropdown menu" instead of the scrolling/sliding interface.
+- **Complete Redesign**: Replaced the sliding panel with a clean dropdown menu:
+  - **Removed**: Sliding panel, backdrop overlay, body scroll lock, complex z-index layering
+  - **New Design**: Simple dropdown that appears directly below the header
+  - **Better UX**: No more screen-covering overlays or scroll blocking
+  - **Cleaner Animation**: Just a smooth dropdown appearance/disappearance
+  - **Mobile-Optimized**: Touch-friendly buttons with proper spacing
+  - **Consistent Styling**: Matches header design with backdrop blur effect
+
+- **Technical Implementation**:
+  - Dropdown positioned with `absolute top-full left-0 right-0`
+  - Uses same container constraints as header for alignment
+  - Clean state management with simple `useState` toggle
+  - Auto-close on navigation without complex event handling
+  - Proper mobile breakpoint detection with `useIsMobile()` hook
+
+- **User Experience Improvements**:
+  - No more "horrible scrolling interface"
+  - Intuitive dropdown pattern familiar to mobile users
+  - Page remains scrollable when menu is open
+  - No dark overlays covering content
+  - Clean, modern mobile navigation design
+
+- **Impact**: Mobile navigation now provides an excellent, intuitive user experience that matches modern mobile app patterns without being intrusive or complex.

@@ -19,8 +19,8 @@
 *.pem
 
 # Local environment variables
-.env.local
-.env*.local
+.env
+.env.*
 
 # Log files
 npm-debug.log*
