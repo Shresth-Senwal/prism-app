@@ -1,3 +1,8 @@
+#### [2025-07-25] Gemini Flash Model Upgraded to 2.0
+
++- The Gemini model used for AI-powered analysis now uses the endpoint `gemini-2.0-flash` (not `gemini-2.0-flash-latest`) in the `/api/analyze` route, per latest API requirements.
++- Reason: To ensure compatibility with the correct Gemini 2.0 Flash model endpoint.
++- Impact: All topic analyses now use the correct Gemini 2.0 Flash endpoint. No other code changes required. API key usage and prompt structure remain the same.
 #### [2025-07-25] .gitignore Updated for Env Files
 
 - Updated `.gitignore` to ignore all `.env` files, including `.env`, `.env.*`, `.env.local`, and `.env*.local`.
