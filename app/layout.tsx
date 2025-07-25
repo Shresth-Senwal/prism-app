@@ -12,7 +12,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { cn } from "@/lib/utils"
-import { ResponsiveHeader } from "@/components/navigation/responsive-header"
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -59,8 +59,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ResponsiveHeader />
-          <main className="flex-1 flex flex-col" id="main-content">
+          <Header />
+          <main className="flex-1 flex flex-col" id="main-content" style={{ paddingTop: '60px' }}>
             {children}
           </main>
           <Footer />
