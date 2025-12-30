@@ -26,6 +26,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getRedditAccessToken, fetchRedditData } from '@/lib/reddit-auth'
+import { GoogleGenAI } from '@google/genai'
 
 
 // --- Helper: Fetch web search results (placeholder, e.g., SerpAPI, Bing, etc.) ---
@@ -116,7 +117,7 @@ function normalizeData(
   return [...normWeb, ...normReddit]
 }
 
-// --- Helper: Call Gemini Flash 2.0 API ---
+// --- Helper: Call Gemini Flash 2.0 API using GoogleGenAI SDK ---
 /**
  * Call Gemini Flash 2.0 API with enhanced prompt for multi-source analysis
  * @param topic - The topic being analyzed
@@ -193,32 +194,51 @@ Generate a JSON object with the following exact structure:
 - If no specific insights, contrasts, or key points are found, return an empty array [] for that field.
 `
 
-  const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + GEMINI_API_KEY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { 
-        responseMimeType: "application/json",
-        temperature: 0.5, 
-        maxOutputTokens: 2048 
-      }
-    })
+  // Initialize GoogleGenAI SDK
+  const ai = new GoogleGenAI({
+    apiKey: GEMINI_API_KEY,
   })
-  if (!res.ok) {
-    const errorBody = await res.text();
-    console.error("Gemini API Error:", errorBody);
-    throw new Error('Gemini API request failed');
+
+  const config = {
+    temperature: 0,
+    thinkingConfig: {
+      thinkingBudget: -1,
+    },
   }
-  const data = await res.json()
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
-  
+
+  const model = 'gemini-flash-lite-latest'
+
+  const contents = [
+    {
+      role: 'user',
+      parts: [
+        {
+          text: prompt,
+        },
+      ],
+    },
+  ]
+
   try {
-    // The response IS the JSON object.
-    return JSON.parse(text);
+    // Use streaming API to collect response
+    const response = await ai.models.generateContentStream({
+      model,
+      config,
+      contents,
+    })
+
+    let fullText = ''
+    for await (const chunk of response) {
+      if (chunk.text) {
+        fullText += chunk.text
+      }
+    }
+
+    // Parse the collected JSON response
+    return JSON.parse(fullText)
   } catch (e) {
-    console.error("Failed to parse Gemini JSON response:", text);
-    throw new Error("Failed to parse analysis from AI response.");
+    console.error("Failed to parse Gemini JSON response:", e)
+    throw new Error("Failed to parse analysis from AI response.")
   }
 }
 
