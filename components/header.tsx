@@ -12,7 +12,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Gem, Search, Globe } from "lucide-react"
+import { Gem } from "lucide-react"
 
 export function Header() {
   const pathname = usePathname()
@@ -74,55 +74,7 @@ export function Header() {
         flexShrink: '0 !important' as any,
         alignItems: 'center !important' as any
       }}>
-        <Link
-          href="/"
-          style={{
-            display: 'flex !important' as any,
-            alignItems: 'center !important' as any,
-            justifyContent: 'center !important' as any,
-            width: '40px !important' as any,
-            height: '40px !important' as any,
-            borderRadius: '6px !important' as any,
-            backgroundColor: pathname === '/' ? 'rgba(255,255,255,0.1) !important' as any : 'transparent !important' as any,
-            color: 'white !important' as any,
-            textDecoration: 'none !important' as any,
-            flexShrink: '0 !important' as any,
-            border: 'none !important' as any,
-            outline: 'none !important' as any
-          }}
-          title="Analyze"
-        >
-          <Search style={{ 
-            width: '18px !important' as any, 
-            height: '18px !important' as any,
-            color: 'white !important' as any
-          }} />
-        </Link>
-        
-        <Link
-          href="/discover"
-          style={{
-            display: 'flex !important' as any,
-            alignItems: 'center !important' as any,
-            justifyContent: 'center !important' as any,
-            width: '40px !important' as any,
-            height: '40px !important' as any,
-            borderRadius: '6px !important' as any,
-            backgroundColor: pathname === '/discover' ? 'rgba(255,255,255,0.1) !important' as any : 'transparent !important' as any,
-            color: 'white !important' as any,
-            textDecoration: 'none !important' as any,
-            flexShrink: '0 !important' as any,
-            border: 'none !important' as any,
-            outline: 'none !important' as any
-          }}
-          title="Discover"
-        >
-          <Globe style={{ 
-            width: '18px !important' as any, 
-            height: '18px !important' as any,
-            color: 'white !important' as any
-          }} />
-        </Link>
+        {/* Search/Analyze button removed */}
       </div>
     </div>
   )
